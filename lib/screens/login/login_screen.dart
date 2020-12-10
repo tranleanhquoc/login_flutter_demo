@@ -62,9 +62,23 @@ class LoginScreen extends StatelessWidget {
 
   void _onLoginTapped(LoginState state, BuildContext context) {
     dismissKeyboard(context);
-    if (state.status.isValid)
+    if (state.status.isValid &&
+        Validators.isValidEmail(state.email.value) &&
+        Validators.isValidPassword(state.password.value))
       context.read<LoginBloc>().add(LoginSubmitted());
-    else {
+    else if (!Validators.isValidEmail(state.email.value) ||
+        !Validators.isValidPassword(state.password.value)) {
+      Scaffold.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+              content: Text(
+            'Invalid email or password!',
+            style: GoogleFonts.roboto(fontSize: 13),
+            textAlign: TextAlign.center,
+          )),
+        );
+    } else {
       if (_emailCtrl.text.isEmpty)
         FocusScope.of(context).requestFocus(_emailFocus);
       else if (_passCtrl.text.isEmpty)

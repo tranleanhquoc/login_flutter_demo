@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: GoogleFonts.comfortaa(fontSize: 36),
                           ),
                           SizedBox(height: 32),
-                          Text("WHAT'S  TODAY",
+                          Text("WHAT'S NEW TODAY",
                               style: GoogleFonts.roboto(
                                   fontSize: 13, fontWeight: FontWeight.w900)),
                           SizedBox(height: 24),
