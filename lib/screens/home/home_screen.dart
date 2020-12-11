@@ -1,10 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:example/commons/app_assets.dart';
 import 'package:example/components/square_button.dart';
-import 'package:example/data/models/carousel_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../routes/routes_name.dart';
+import 'models/image_information.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -14,40 +15,80 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<CarouselModel> _carousels = [
-    CarouselModel(
+  List<ImageInformation> _carousels = [
+    ImageInformation(
         imageUrl: AssetsPNG.carousel1,
         avatarUrl: AssetsPNG.member2,
         name: "Ridhwan Nordin",
         nickname: "@ridzjcob"),
-    CarouselModel(
+    ImageInformation(
         imageUrl: AssetsPNG.carousel2,
         avatarUrl: AssetsPNG.member3,
         name: "Clem Onojeghuo",
         nickname: "@clemono2"),
-    CarouselModel(
+    ImageInformation(
         imageUrl: AssetsPNG.carousel3,
         avatarUrl: AssetsPNG.member4,
         name: "Jon Tyson",
         nickname: "@jontyson"),
-    CarouselModel(
+    ImageInformation(
         imageUrl: AssetsPNG.carousel4,
         avatarUrl: AssetsPNG.member5,
         name: "Simon Zhu",
         nickname: "@smnzhu"),
   ];
 
-  List<String> _gridImgs = [
-    AssetsPNG.gridview1,
-    AssetsPNG.gridview2,
-    AssetsPNG.gridview3,
-    AssetsPNG.gridview4,
-    AssetsPNG.gridview5,
-    AssetsPNG.gridview6,
-    AssetsPNG.gridview7,
-    AssetsPNG.gridview8,
-    AssetsPNG.gridview9,
-    AssetsPNG.gridview10,
+  List<ImageInformation> _gridImgs = [
+    ImageInformation(
+        imageUrl: AssetsPNG.gridview1,
+        avatarUrl: AssetsPNG.member2,
+        name: "Ridhwan Nordin",
+        nickname: "@ridzjcob"),
+    ImageInformation(
+        imageUrl: AssetsPNG.gridview2,
+        avatarUrl: AssetsPNG.member2,
+        name: "Ridhwan Nordin",
+        nickname: "@ridzjcob"),
+    ImageInformation(
+        imageUrl: AssetsPNG.gridview3,
+        avatarUrl: AssetsPNG.member2,
+        name: "Ridhwan Nordin",
+        nickname: "@ridzjcob"),
+    ImageInformation(
+        imageUrl: AssetsPNG.gridview4,
+        avatarUrl: AssetsPNG.member2,
+        name: "Ridhwan Nordin",
+        nickname: "@ridzjcob"),
+    ImageInformation(
+        imageUrl: AssetsPNG.gridview5,
+        avatarUrl: AssetsPNG.member2,
+        name: "Ridhwan Nordin",
+        nickname: "@ridzjcob"),
+    ImageInformation(
+        imageUrl: AssetsPNG.gridview6,
+        avatarUrl: AssetsPNG.member2,
+        name: "Ridhwan Nordin",
+        nickname: "@ridzjcob"),
+    ImageInformation(
+        imageUrl: AssetsPNG.gridview7,
+        avatarUrl: AssetsPNG.member2,
+        name: "Ridhwan Nordin",
+        nickname: "@ridzjcob"),
+    ImageInformation(
+        imageUrl: AssetsPNG.gridview8,
+        avatarUrl: AssetsPNG.member2,
+        name: "Ridhwan Nordin",
+        nickname: "@ridzjcob"),
+    ImageInformation(
+        imageUrl: AssetsPNG.gridview9,
+        avatarUrl: AssetsPNG.member2,
+        name: "Ridhwan Nordin",
+        nickname: "@ridzjcob"),
+    ImageInformation(
+        imageUrl: AssetsPNG.gridview10,
+        avatarUrl: AssetsPNG.member2,
+        name: "Ridhwan Nordin",
+        nickname: "@ridzjcob"),
   ];
 
   @override
@@ -96,13 +137,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         ])))));
   }
 
-  Widget _buildCarouselSlider(CarouselModel item) {
+  Widget _buildCarouselSlider(ImageInformation item) {
     return Builder(builder: (context) {
       return Container(
           width: MediaQuery.of(context).size.width,
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Image.asset(item.imageUrl),
+            GestureDetector(
+                onTap: () => Navigator.of(context)
+                    .pushNamed(RoutesName.imagePreview, arguments: item),
+                child: Hero(
+                    tag: item.imageUrl, child: Image.asset(item.imageUrl))),
             SizedBox(height: 16),
             Row(children: [
               Image.asset(item.avatarUrl, width: 28, height: 28),
@@ -128,9 +173,16 @@ class _HomeScreenState extends State<HomeScreen> {
       physics: BouncingScrollPhysics(),
       crossAxisCount: 2,
       itemCount: _gridImgs.length,
-      itemBuilder: (BuildContext context, int index) => Image.asset(
-        _gridImgs[index],
-        fit: BoxFit.cover,
+      itemBuilder: (BuildContext context, int index) => GestureDetector(
+        onTap: () => Navigator.of(context)
+            .pushNamed(RoutesName.imagePreview, arguments: _gridImgs[index]),
+        child: Hero(
+          tag: _gridImgs[index].imageUrl,
+          child: Image.asset(
+            _gridImgs[index].imageUrl,
+            fit: BoxFit.cover,
+          ),
+        ),
       ),
       staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
       mainAxisSpacing: 10.0,

@@ -4,4 +4,5 @@ class RoutesName {
   static const String register2 = "/register_2";
   static const String login = "/login";
   static const String dashboard = "/dashboard";
+  static const String imagePreview = "/image_preview";
 }

@@ -1,3 +1,5 @@
+import 'package:example/screens/image_preview/image_preview_screen.dart';
+
 import '../routes/base_route_generator.dart';
 import '../routes/routes_name.dart';
 import '../screens/authentication/authentication_screen.dart';
@@ -24,6 +26,9 @@ class RoutesGenerator extends BaseRouteGenerator {
             builder: (_) => Register2Screen(registerValue: args));
       case RoutesName.dashboard:
         return CupertinoPageRoute(builder: (_) => DashboardScreen());
+      case RoutesName.imagePreview:
+        return CupertinoPageRoute(
+            builder: (_) => ImagePreviewScreen(image: args));
       default:
         return errorRoute(settings.name, error: "unknown error");
     }
