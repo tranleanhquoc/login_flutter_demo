@@ -8,11 +8,14 @@ class AuthenticationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          _buildImage(context),
-          _buildBottomBar(context),
-        ],
+      body: SafeArea(
+        top: false,
+        child: Column(
+          children: [
+            _buildImage(context),
+            _buildBottomBar(context),
+          ],
+        ),
       ),
     );
   }
