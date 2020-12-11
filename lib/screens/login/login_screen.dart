@@ -9,6 +9,7 @@ import 'package:example/screens/authentication/bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../commons/utils/validators.dart';
 import 'bloc/bloc.dart';
 import 'package:formz/formz.dart';
 import 'bloc/login_bloc.dart';
@@ -60,40 +61,15 @@ class LoginScreen extends StatelessWidget {
     return null;
   }
 
+  bool _validateLogin(LoginState state, BuildContext context) =>
+      state.status.isValid &&
+      Validators.isValidEmail(state.email.value) &&
+      Validators.isValidPassword(state.password.value);
+
   void _onLoginTapped(LoginState state, BuildContext context) {
     dismissKeyboard(context);
-    if (state.status.isValid &&
-        Validators.isValidEmail(state.email.value) &&
-        Validators.isValidPassword(state.password.value))
+    if (_validateLogin(state, context))
       context.read<LoginBloc>().add(LoginSubmitted());
-    else if (!Validators.isValidEmail(state.email.value) ||
-        !Validators.isValidPassword(state.password.value)) {
-      Scaffold.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(
-          SnackBar(
-              content: Text(
-            'Invalid email or password!',
-            style: GoogleFonts.roboto(fontSize: 13),
-            textAlign: TextAlign.center,
-          )),
-        );
-    } else {
-      if (_emailCtrl.text.isEmpty)
-        FocusScope.of(context).requestFocus(_emailFocus);
-      else if (_passCtrl.text.isEmpty)
-        FocusScope.of(context).requestFocus(_passFocus);
-      Scaffold.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(
-          SnackBar(
-              content: Text(
-            'Please input your email and password!',
-            style: GoogleFonts.roboto(fontSize: 13),
-            textAlign: TextAlign.center,
-          )),
-        );
-    }
   }
 
   @override
@@ -140,7 +116,7 @@ class LoginScreen extends StatelessWidget {
 
   Widget _buildEmailInput() {
     return BlocBuilder<LoginBloc, LoginState>(
-      buildWhen: (previous, current) => previous.email != current.email,
+      // buildWhen: (previous, current) => previous.email != current.email,
       builder: (context, state) {
         return TextFormField(
           controller: _emailCtrl,
@@ -177,7 +153,7 @@ class LoginScreen extends StatelessWidget {
 
   Widget _buildPasswordInput() {
     return BlocBuilder<LoginBloc, LoginState>(
-      buildWhen: (previous, current) => previous.password != current.password,
+      // buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
         return TextFormField(
           controller: _passCtrl,
@@ -207,9 +183,9 @@ class LoginScreen extends StatelessWidget {
           validator: (_) => _validatePassword(state),
           onEditingComplete: () {
             _passFocus.unfocus();
-            if (state.status.isValidated) {
-              context.read<LoginBloc>().add(LoginSubmitted());
-            }
+            // if (state.status.isValidated) {
+            //   context.read<LoginBloc>().add(LoginSubmitted());
+            // }
           },
         );
       },
@@ -218,12 +194,13 @@ class LoginScreen extends StatelessWidget {
 
   Widget _buildLoginButton() {
     return BlocBuilder<LoginBloc, LoginState>(
-      buildWhen: (previous, current) => previous.status != current.status,
+      // buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
         return SquareButton(
             onTap: () => _onLoginTapped(state, context),
             text: "LOG IN",
-            btnColor: state.status.isValid ? Colors.black : Colors.black54,
+            btnColor:
+                _validateLogin(state, context) ? Colors.black : Colors.black54,
             textStyle: GoogleFonts.roboto(
                 fontSize: 13,
                 fontWeight: FontWeight.w900,
