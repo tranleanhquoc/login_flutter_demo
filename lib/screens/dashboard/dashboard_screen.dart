@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../commons/app_assets.dart';
 import 'bloc/bloc.dart';
 
 enum TabBarIndex { home, search, add, comment, profile }
@@ -26,14 +27,6 @@ class DashboardScreen extends StatelessWidget {
     return BlocProvider.of<DashboardBloc>(context).currentIndex;
   }
 
-  final List<String> _bottomBarItems = [
-    AssetsSVG.icHome,
-    AssetsSVG.icSearch,
-    AssetsSVG.icNew,
-    AssetsSVG.icComment,
-    AssetsSVG.icProfile
-  ];
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -45,47 +38,35 @@ class DashboardScreen extends StatelessWidget {
             child: BlocBuilder<DashboardBloc, DashboardState>(
                 builder: (context, state) {
               return Scaffold(
-                body: SafeArea(
-                  child: Column(
-                    children: [
-                      Expanded(child: _showScreenByState(state, context)),
-                      _bottomBar(state, context)
-                    ],
-                  ),
-                ),
-                // body: SafeArea(child: _showScreenByState(state, context))
-                // bottomNavigationBar: _bottomNavigationBar(state, context),
+                body: _showScreenByState(state, context),
+                bottomNavigationBar: _bottomNavigationBar(state, context),
               );
             })));
   }
 
   Widget _bottomNavigationBar(DashboardState state, BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: _currentIndex(context),
-      items: _bottomBarItems.map((item) {
-        BottomNavigationBarItem(icon: Icon(Icons.close), label: '');
-      }).toList(),
-      onTap: (index) => _onTapPage(context, index),
-    );
-  }
-
-  Widget _bottomBar(DashboardState state, BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 11, vertical: 9),
       decoration: BoxDecoration(
           border: Border(top: BorderSide(color: Colors.grey, width: 0.5))),
-      child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: _bottomBarItems
-              .map((item) => InkWell(
-                  child: SvgPicture.asset(item),
-                  onTap: () {
-                    _onTapPage(
-                        context,
-                        _bottomBarItems
-                            .indexWhere((element) => element == item));
-                  }))
-              .toList()),
+      child: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        currentIndex: _currentIndex(context),
+        items: [
+          BottomNavigationBarItem(
+              icon: SvgPicture.asset(AssetsSVG.icHome), label: ''),
+          BottomNavigationBarItem(
+              icon: SvgPicture.asset(AssetsSVG.icSearch), label: ''),
+          BottomNavigationBarItem(
+              icon: SvgPicture.asset(AssetsSVG.icNew), label: ''),
+          BottomNavigationBarItem(
+              icon: SvgPicture.asset(AssetsSVG.icComment), label: ''),
+          BottomNavigationBarItem(
+              icon: SvgPicture.asset(AssetsSVG.icProfile), label: ''),
+        ],
+        onTap: (index) => _onTapPage(context, index),
+      ),
     );
   }
 
